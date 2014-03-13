@@ -1,0 +1,28 @@
+#!/usr/bin/env node
+
+var options = require("commander")
+    .version(require("../package.json").version)
+    .usage("[options] <file>")
+    .option("-t, --transformer <transformer>",
+            "Name of a transformer module to use")
+    .parse(process.argv);
+
+var inputPath = options.args[0];
+if (typeof inputPath !== "string") {
+    options.outputHelp();
+    process.exit(-1);
+}
+var t;
+if (options.transformer) {
+    try {
+        t = require(options.transformer);
+    } catch (e) {
+        process.stderr.write(
+            "Failed to load transform '" + options.transformer + "':" +
+            " " + e.message + ".\n"
+        );
+        process.exit(-1);
+    }
+}
+var transform = typeof t === 'function' ? t : t.transform;
+require("../main").runFile(inputPath, transform, {});

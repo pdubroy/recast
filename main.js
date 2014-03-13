@@ -79,6 +79,11 @@ Object.defineProperties(exports, {
         value: run
     },
 
+    runFile: {
+        enumerable: true,
+        value: runFile
+    },
+
     /**
      * Useful utilities for implementing transformer functions.
      */
